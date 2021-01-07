@@ -20,11 +20,11 @@ val colors : Array<Int> = arrayOf(
     "#795548",
     "#4CAF50",
     "#FF9800",
-    ""
+    "#673AB7"
 ).map {
     Color.parseColor(it)
 }.toTypedArray()
-val lines : Int = 4
+val lines : Int = 12
 val backColor : Int = Color.parseColor("#BDBDBD")
 
 fun Int.inverse() : Float = 1f / this
@@ -46,7 +46,7 @@ fun Canvas.drawConcentricCircleJoiner(scale : Float, w : Float, h : Float, paint
     for (j in 0..(lines - 1)) {
         save()
         rotate((360f / lines) * j)
-        drawLine(r1, 0f, r1 + (r2 - r1) * sf3, 0f, paint)
+        drawLine(r2, 0f, r2 + (r1 - r2) * sf3, 0f, paint)
         restore()
     }
     restore()
@@ -58,6 +58,7 @@ fun Canvas.drawCCJNode(i : Int, scale : Float, paint : Paint) {
     paint.color = colors[i]
     paint.strokeCap = Paint.Cap.ROUND
     paint.strokeWidth = Math.min(w, h) / strokeFactor
+    paint.style = Paint.Style.STROKE
     drawConcentricCircleJoiner(scale, w, h, paint)
 }
 

@@ -25,6 +25,7 @@ val colors : Array<Int> = arrayOf(
     Color.parseColor(it)
 }.toTypedArray()
 val lines : Int = 4
+val backColor : Int = Color.parseColor("#BDBDBD")
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
@@ -97,7 +98,7 @@ class ConcentricCircleJoinerView(ctx : Context) : View(ctx) {
 
     data class Animator(var view : View, var animated : Boolean = false) {
 
-        fun animated(cb : () -> Unit) {
+        fun animate(cb : () -> Unit) {
             if (animated) {
                 cb()
                 try {
@@ -184,6 +185,29 @@ class ConcentricCircleJoinerView(ctx : Context) : View(ctx) {
 
         fun startUpdating(cb : () -> Unit) {
             curr.startUpdating(cb)
+        }
+    }
+
+    data class Renderer(var view : ConcentricCircleJoinerView) {
+
+        private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        private val ccj : ConcentricCircleJoiner = ConcentricCircleJoiner(0)
+        private val animator : Animator = Animator(view)
+
+        fun render(canvas : Canvas) {
+            canvas.drawColor(backColor)
+            ccj.draw(canvas, paint)
+            animator.animate {
+                ccj.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            ccj.startUpdating {
+                animator.start()
+            }
         }
     }
 }

@@ -212,4 +212,13 @@ class ConcentricCircleJoinerView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : ConcentricCircleJoinerView {
+            val view : ConcentricCircleJoinerView = ConcentricCircleJoinerView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
